@@ -12,12 +12,14 @@ export default function Auth() {
 //"/api/auth/jwt/create/" proxy end point
   const login = async () => {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/auth/jwt/create`, {
+      await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/auth/jwt/create/`, {
         method: "POST",
         body: JSON.stringify({ username: username, password: password }),
         headers: {
           "Content-Type": "application/json",
         },
+        mode:"cors"
+
       })
         .then((res) => {
           if (res.status === 400) {
@@ -44,12 +46,13 @@ export default function Auth() {
       login();
     } else {
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/register`, {
+        await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/register/`, {
           method: "POST",
           body: JSON.stringify({ username: username, password: password }),
           headers: {
             "Content-Type": "application/json",
           },
+          mode:"cors"
         }).then((res) => {
           if (res.status === 400) {
             throw "authentication failed";
