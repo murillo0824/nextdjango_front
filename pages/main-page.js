@@ -21,7 +21,7 @@ export default function MainPage() {
         </Link>
         <Link href="/task-page">
           <a className="bg-gray-500 mr-8 hover:bg-gray-600 text-white px-4 py-12 rounded">
-            visit blog page by ssg + isr
+            visit task page by ssg + isr + swr
           </a>
         </Link>
       </div>

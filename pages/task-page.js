@@ -30,7 +30,7 @@ export default function BlogPage({ staticFilteredTasks }) {
   return (
     <Layout title="task page">
       <ul>
-        {filteredTasks && filteredTasks.map((task)=><Task key={task.id} task={task}/>)}
+        {filteredTasks && filteredTasks.map((task)=><Task key={task.id} task={task} taskDeleted={mutate}/>)}
         {/* タスクリストにはuseSWRから帰ってくるtask で処理する */}
       </ul>
       <Link href="/main-page">
