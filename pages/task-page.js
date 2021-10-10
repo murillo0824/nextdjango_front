@@ -1,10 +1,38 @@
 
+import { useEffect } from "react";
 import Layout from "../components/Layout";
 import Link from "next/link";
+import { getAllTasksData } from "../lib/tasks";
+import Task from "../components/Task";
+import useSWR from "swr";
 
-export default function BlogPage({ filteredPosts }) {
+const fetcher = (url)=>fetch(url).then((res)=> res.json());
+const apiUrl = `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/list-task/`;
+
+
+export default function BlogPage({ staticFilteredTasks }) {
+
+  const {data: tasks, mutate} = useSWR(apiUrl, fetcher, {
+    fallbackData:staticFilteredTasks,
+  });
+  //useSWRでクライアントサイドからフェッチする
+  // fallbackData: が　非同期処理が終了する前の初期値とする
+
+
+  const filteredTasks = tasks?.sort(
+    (a,b)=> new Date(b.created_at) - new Date(a.created_at)
+  );
+  // 非同期処理で帰ってきたレスポンスのソート
+
+  useEffect(()=>{
+    mutate();
+  },[]);
   return (
     <Layout title="task page">
+      <ul>
+        {filteredTasks && filteredTasks.map((task)=><Task key={task.id} task={task}/>)}
+        {/* タスクリストにはuseSWRから帰ってくるtask で処理する */}
+      </ul>
       <Link href="/main-page">
         <div className="flex cursor-pointer mt-12">
           <svg
@@ -28,4 +56,15 @@ export default function BlogPage({ filteredPosts }) {
       </Link>
     </Layout>
   );
+}
+
+
+//サーバーサイドのゲットタスクが終了後戻り値を返す。
+export async function getStaticProps(){
+  const staticFilteredTasks = await getAllTasksData();
+
+  return {
+    props:{ staticFilteredTasks },
+    revalidate:5
+  }
 }
