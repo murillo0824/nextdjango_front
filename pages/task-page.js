@@ -10,7 +10,7 @@ import TaskForm from "../components/TaskForm";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 const apiUrl = `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/list-task/`;
 
-export default function BlogPage({ staticFilteredTasks }) {
+export default function TaskPage({ staticFilteredTasks }) {
   const { data: tasks, mutate } = useSWR(apiUrl, fetcher, {
     fallbackData: staticFilteredTasks,
   });
